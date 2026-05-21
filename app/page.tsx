@@ -5,7 +5,8 @@ import ProductsSection from "./components/sections/04_ProductsSection";
 import FlowSection from "./components/sections/05_FlowSection";
 import ServiceSection from "./components/sections/06_ServiceSection";
 import ContactSection from "./components/sections/07_ContactSection";
-import Footer from "./components/sections/08_Footer";
+import GroupLinksSection from "./components/sections/08_GroupLinksSection";
+import Footer from "./components/sections/09_Footer";
 
 export default function Home() {
   return (
@@ -14,12 +15,13 @@ export default function Home() {
       <HeroSection />
 
       {/* Main Content */}
-      <main className="relative z-10 mt-2 px-4 pb-20 sm:mt-0 sm:px-6 lg:px-10">
+      <main className="relative z-10 mt-2 px-4 pb-3 sm:mt-0 sm:px-6 lg:px-10">
         <StatsSection />
         <ProductsSection />
         <FlowSection />
         <ServiceSection />
         <ContactSection />
+        <GroupLinksSection />
         <Footer />
       </main>
     </div>

@@ -17,7 +17,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden pt-20 sm:pt-24 lg:min-h-screen">
+    <section className="relative overflow-hidden pt-20 sm:pt-24 lg:min-h-[clamp(720px,82vh,860px)]">
       {/* Background Slider */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -50,7 +50,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.6),transparent_18%,transparent_78%,rgba(0,0,0,0.7))]" />
 
       {/* Hero Content */}
-      <div className="relative z-10 mx-auto grid max-w-7xl gap-6 px-4 pb-4 pt-6 sm:px-6 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:px-10 lg:pb-16 lg:pt-12">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-6 px-4 pb-4 pt-6 sm:px-6 lg:min-h-[clamp(620px,72vh,760px)] lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:px-10 lg:pb-16 lg:pt-12">
         <div className="flex items-start">
           <motion.div
             initial={{ height: 0, opacity: 0 }}

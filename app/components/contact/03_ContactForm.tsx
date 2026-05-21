@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Script from "next/script";
+import { AnimatePresence, motion } from "framer-motion";
+import ContactTurnstile from "./04_ContactTurnstile";
+import ContactSubmitButton from "./05_ContactSubmitButton";
+import FadeUp from "../ui/FadeUp";
 
 declare global {
   interface Window {
@@ -17,8 +19,8 @@ const categories = [
   { key: "farm", label: "農産物", code: "FARM" },
   { key: "matcha", label: "抹茶", code: "MATCHA" },
   { key: "luxury", label: "時計・宝飾", code: "LUXURY" },
-  { key: "jewelry", label: "ジュエリー", code: "JEWEL" },
-  { key: "global", label: "輸出支援", code: "GLOBAL" },
+  { key: "global", label: "輸出入支援", code: "GLOBAL" },
+  { key: "jewelry", label: "その他", code: "OTHER" },
 ];
 
 export default function ContactForm() {
@@ -35,14 +37,20 @@ export default function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [turnstileVerified, setTurnstileVerified] = useState(false);
 
   useEffect(() => {
     window.onTurnstileSuccess = (token: string) => {
       setTurnstileToken(token);
+
+      setTimeout(() => {
+        setTurnstileVerified(true);
+      }, 3000);
     };
 
     window.onTurnstileExpired = () => {
       setTurnstileToken("");
+      setTurnstileVerified(false);
     };
   }, []);
 
@@ -137,6 +145,7 @@ export default function ContactForm() {
       setSelectedCategory(categories[0].key);
       setErrors({});
       setTurnstileToken("");
+      setTurnstileVerified(false);
     } catch (error) {
       alert(
         error instanceof Error
@@ -156,7 +165,7 @@ export default function ContactForm() {
     }`;
 
   return (
-    <form noValidate onSubmit={handleSubmit}>
+    <form noValidate onSubmit={handleSubmit} className="relative">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(217,70,239,0.12),transparent_34%)]" />
       <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/45 to-transparent" />
 
@@ -190,10 +199,11 @@ export default function ContactForm() {
                 }`}
               >
                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_52%)]" />
+
                 <div className="pointer-events-none absolute inset-0 -translate-x-[130%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-500 group-hover:translate-x-[130%]" />
 
                 <div
-                  className={`relative mx-auto flex h-15 w-15 items-center justify-center rounded-full border text-[9px] font-black tracking-[0.18em] ${
+                  className={`relative mx-auto flex h-[60px] w-[60px] items-center justify-center rounded-full border text-[9px] font-black tracking-[0.18em] ${
                     active
                       ? "border-fuchsia-300/70 bg-fuchsia-500/20 text-white"
                       : "border-cyan-300/35 bg-cyan-400/10 text-cyan-200/80"
@@ -209,146 +219,127 @@ export default function ContactForm() {
             );
           })}
         </div>
+      </div>
 
-        <div className="mt-9 grid gap-5">
-          <div className="grid gap-5 md:grid-cols-2">
-            <div>
-              <label className="mb-2 block text-sm font-bold text-white/82">
-                会社名
-              </label>
+      <div className="mt-9 grid gap-5">
+        <div className="grid gap-5 md:grid-cols-2">
+          <div>
+            <label className="mb-2 block text-sm font-bold text-white/82">
+              会社名
+            </label>
 
-              <input
-                type="text"
-                name="company"
-                value={form.company}
-                maxLength={100}
-                onChange={handleChange}
-                className={inputClass()}
-                placeholder="例）株式会社TRADE-ON"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-bold text-white/82">
-                ご担当者名 <span className="text-fuchsia-300">*</span>
-              </label>
-
-              <input
-                type="text"
-                name="name"
-                value={form.name}
-                maxLength={50}
-                onChange={handleChange}
-                className={inputClass(!!errors.name)}
-                placeholder="山田 太郎"
-              />
-
-              {errors.name && (
-                <p className="mt-2 text-xs font-bold text-red-300">
-                  {errors.name}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2">
-            <div>
-              <label className="mb-2 block text-sm font-bold text-white/82">
-                メールアドレス <span className="text-fuchsia-300">*</span>
-              </label>
-
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                maxLength={100}
-                onChange={handleChange}
-                className={inputClass(!!errors.email)}
-                placeholder="例）info@tradeon.co.jp"
-              />
-
-              {errors.email && (
-                <p className="mt-2 text-xs font-bold text-red-300">
-                  {errors.email}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-bold text-white/82">
-                電話番号
-              </label>
-
-              <input
-                type="tel"
-                name="phone"
-                value={form.phone}
-                maxLength={30}
-                onChange={handleChange}
-                className={inputClass()}
-                placeholder="090-1234-5678"
-              />
-            </div>
+            <input
+              type="text"
+              name="company"
+              value={form.company}
+              maxLength={100}
+              onChange={handleChange}
+              className={inputClass()}
+              placeholder="例）株式会社TRADE-ON"
+            />
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-bold text-white/82">
-              お問い合わせ内容 <span className="text-fuchsia-300">*</span>
+              ご担当者名 <span className="text-fuchsia-300">*</span>
             </label>
 
-            <textarea
-              name="message"
-              value={form.message}
-              maxLength={3000}
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              maxLength={50}
               onChange={handleChange}
-              rows={6}
-              className={`${inputClass(!!errors.message)} resize-none leading-7`}
-              placeholder="お問い合わせ内容をご入力ください..."
+              className={inputClass(!!errors.name)}
+              placeholder="山田 太郎"
             />
 
-            {errors.message && (
+            {errors.name && (
               <p className="mt-2 text-xs font-bold text-red-300">
-                {errors.message}
+                {errors.name}
               </p>
             )}
           </div>
         </div>
 
-        <div className="mt-8 rounded-2xl border border-fuchsia-300/30 bg-fuchsia-500/[0.045] px-5 py-4 text-sm leading-7 text-white/72 shadow-[0_0_32px_rgba(217,70,239,0.08)]">
-          <div>送信後、合同会社TRADE-ONより自動返信メールをお送りします。</div>
-          <div>内容を確認後、担当者より2営業日以内にご連絡いたします。</div>
+        <div className="grid gap-5 md:grid-cols-2">
+          <div>
+            <label className="mb-2 block text-sm font-bold text-white/82">
+              メールアドレス <span className="text-fuchsia-300">*</span>
+            </label>
+
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              maxLength={100}
+              onChange={handleChange}
+              className={inputClass(!!errors.email)}
+              placeholder="例）info@tradeon.co.jp"
+            />
+
+            {errors.email && (
+              <p className="mt-2 text-xs font-bold text-red-300">
+                {errors.email}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-bold text-white/82">
+              電話番号
+            </label>
+
+            <input
+              type="tel"
+              name="phone"
+              value={form.phone}
+              maxLength={30}
+              onChange={handleChange}
+              className={inputClass()}
+              placeholder="090-1234-5678"
+            />
+          </div>
         </div>
 
-        <Script
-          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-          async
-          defer
-        />
+        <div>
+          <label className="mb-2 block text-sm font-bold text-white/82">
+            お問い合わせ内容 <span className="text-fuchsia-300">*</span>
+          </label>
 
-        <div className="mt-7 flex justify-center">
-          <div
-            className="cf-turnstile"
-            data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-            data-callback="onTurnstileSuccess"
-            data-expired-callback="onTurnstileExpired"
+          <textarea
+            name="message"
+            value={form.message}
+            maxLength={3000}
+            onChange={handleChange}
+            rows={6}
+            className={`${inputClass(!!errors.message)} resize-none leading-7`}
+            placeholder="お問い合わせ内容をご入力ください..."
           />
+
+          {errors.message && (
+            <p className="mt-2 text-xs font-bold text-red-300">
+              {errors.message}
+            </p>
+          )}
         </div>
+      </div>
 
-        <motion.button
-          type="submit"
-          disabled={loading}
-          whileHover={!loading ? { y: -3, scale: 1.01 } : undefined}
-          whileTap={!loading ? { scale: 0.98 } : undefined}
-          transition={{ duration: 0.2 }}
-          className="group relative mt-7 w-full overflow-hidden rounded-2xl border border-cyan-300/35 bg-[linear-gradient(90deg,#d100ff_0%,#7b3cff_45%,#2563ff_100%)] px-8 py-5 text-lg font-black text-white shadow-[0_0_48px_rgba(124,58,237,0.36)] transition-shadow duration-300 hover:shadow-[0_0_70px_rgba(217,70,239,0.34),0_0_42px_rgba(34,211,238,0.20)] disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          <span className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.20),transparent_58%)]" />
-          <span className="absolute inset-0 -translate-x-[120%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/45 to-transparent transition-transform duration-500 group-hover:translate-x-[120%]" />
+      <div className="mt-8 rounded-2xl border border-fuchsia-300/30 bg-fuchsia-500/[0.045] px-5 py-4 text-sm leading-7 text-white/72 shadow-[0_0_32px_rgba(217,70,239,0.08)]">
+        <div>送信後、合同会社TRADE-ONより自動返信メールをお送りします。</div>
+        <div>内容を確認後、担当者より2営業日以内にご連絡いたします。</div>
+      </div>
 
-          <span className="relative">
-            {loading ? "送信しています..." : "送信する →"}
-          </span>
-        </motion.button>
+      <div className="relative mt-14">
+        <AnimatePresence initial={false}>
+          {!turnstileVerified && (
+            <FadeUp className="pointer-events-auto absolute left-1/2 top-0 z-30 -translate-x-1/2 -translate-y-[85%]">
+              <ContactTurnstile visible={!turnstileVerified} />
+            </FadeUp>
+          )}
+        </AnimatePresence>
+
+        <ContactSubmitButton loading={loading} />
 
         <div className="mt-6 text-center text-xs leading-6 text-white/34">
           ご入力いただいた情報は、お問い合わせ対応以外の目的では使用いたしません。

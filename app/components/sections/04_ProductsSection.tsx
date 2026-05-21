@@ -1,15 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Handshake } from "lucide-react";
 
 // Product Cards
 const cards = [
-  { title: "中古車の輸出", en: "Used Cars", image: "/cars.png", icon: "/icon-cars.png" },
-  { title: "海産物の輸出入", en: "Seafood", image: "/seafood.png", icon: "/icon-seafood.png" },
+  { title: "自動車", en: "Used Cars", image: "/cars.png", icon: "/icon-cars.png" },
+  { title: "海産物", en: "Seafood", image: "/seafood.png", icon: "/icon-seafood.png" },
   { title: "農産物", en: "Agriculture", image: "/farm.png", icon: "/icon-farm.png" },
   { title: "抹茶", en: "Matcha", image: "/matcha.png", icon: "/icon-matcha.png" },
-  { title: "時計・ブランド品", en: "Luxury Goods", image: "/watch.png", icon: "/icon-watch.png" },
-  { title: "ジュエリー", en: "Jewelry", image: "/jewelry.png", icon: "/icon-jewelry.png" },
+  { title: "時計・宝飾", en: "Luxury Goods", image: "/watch.png", icon: "/icon-watch.png" },
+  { title: "その他", en: "Others", image: "/other.png", icon: "/icon-global.png" },
 ];
 
 export default function ProductsSection() {
@@ -110,6 +111,49 @@ export default function ProductsSection() {
           </motion.article>
         ))}
       </div>
+      <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.7 }}
+  viewport={{ once: true }}
+  className="relative col-span-full mt-1 overflow-hidden rounded-[2rem] border border-fuchsia-400/20 bg-gradient-to-r from-[#09182a] via-[#0a1630] to-[#24143f] px-10 py-5 shadow-[0_0_40px_rgba(168,85,247,0.12)]"
+>
+  {/* Glow */}
+  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(168,85,247,0.15),transparent_24%),radial-gradient(circle_at_right,rgba(34,211,238,0.10),transparent_24%)]" />
+
+  <div className="relative grid items-start gap-5 lg:grid-cols-[1fr_1.9fr] lg:items-center lg:gap-8">
+    {/* Left */}
+    <div className="flex items-center gap-5">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-fuchsia-400/30 bg-fuchsia-400/10">
+        <Handshake className="h-7 w-7 text-fuchsia-300" />
+      </div>
+
+      <div>
+        <h3 className="text-2xl font-black leading-snug text-white">
+          その他商材についても
+          <br />
+          対応可能です
+        </h3>
+      </div>
+    </div>
+
+    {/* Right */}
+    <div className="max-w-3xl border-l border-white/10 pl-8">
+      <p className="text-lg leading-5.5 text-white/85">
+        掲載商材以外についても、幅広くお取り扱いしております。
+        <br />
+        ご要望に応じて柔軟に対応いたしますので、
+        まずはお気軽にご相談ください。
+      </p>
+        <p className="relative mt-1 max-w-[300px] text-base leading-5 text-white/60 sm:max-w-none">
+          ※取り扱い商品は一例です。詳細はお問い合わせください。
+        </p>
+    </div>
+  </div>
+
+
+</motion.div>
     </motion.section>
+    
   );
 }
