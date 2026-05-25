@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Phone, Mail, Printer } from "lucide-react";
 
@@ -18,9 +19,11 @@ export default function Footer() {
       <div className="relative mx-auto grid max-w-7xl items-center gap-6 px-5 py-4 sm:px-8 lg:grid-cols-[0.9fr_1.3fr] lg:px-10">
         {/* Left */}
         <div className="flex items-center gap-5">
-          <img
+          <Image
             src="/company.png"
             alt="TRADE-ON LLC"
+            width={1536}
+            height={1024}
             className="h-30 w-auto object-contain"
           />
 

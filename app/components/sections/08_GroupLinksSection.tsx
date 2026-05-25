@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   motion
 } from "framer-motion";
@@ -81,9 +82,11 @@ export default function GroupLinksSection() {
             >
               <div className="flex min-h-[72px] items-center gap-4">
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/20">
-                  <img
+                  <Image
                     src={item.logo}
                     alt={item.name}
+                    width={160}
+                    height={160}
                     className={`h-full w-full object-contain ${item.logoClass}`}
                   />
                 </div>

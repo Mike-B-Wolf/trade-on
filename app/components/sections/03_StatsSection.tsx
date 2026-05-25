@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 // Company Stats
@@ -32,10 +33,12 @@ export default function StatsSection() {
           >
             {/* Icon */}
             <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-fuchsia-400/35 bg-black/35 shadow-[0_0_35px_rgba(139,92,246,0.22)] backdrop-blur sm:h-24 sm:w-24">
-              <img
+              <Image
                 src={item.icon}
                 alt={item.label}
-                className="h-20 w-20 object-contain sm:h-24 sm:w-24"
+                width={96}
+                height={96}
+                className="h-auto w-20 object-contain sm:w-24"
               />
             </div>
 

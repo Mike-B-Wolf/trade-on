@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Handshake } from "lucide-react";
 
@@ -89,10 +90,12 @@ export default function ProductsSection() {
             {/* Icon */}
             <div className="absolute left-5 top-5 flex h-14 w-14 items-center justify-center rounded-full border border-fuchsia-400/40 bg-black/45 shadow-[0_0_24px_rgba(168,85,247,0.35)] backdrop-blur-md transition duration-500 group-hover:scale-110 group-hover:border-cyan-300/60 group-hover:shadow-[0_0_36px_rgba(34,211,238,0.32)]">
               <div className="absolute inset-1 rounded-full bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,0.18),transparent_50%)]" />
-              <img
+              <Image
                 src={card.icon}
                 alt={card.title}
-                className="relative h-20 w-20 object-contain transition duration-500 group-hover:scale-110 sm:h-20 sm:w-20"
+                width={80}
+                height={80}
+                className="relative h-auto w-20 object-contain transition duration-500 group-hover:scale-110 sm:w-20"
               />
             </div>
 

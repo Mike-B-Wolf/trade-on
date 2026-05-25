@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -35,7 +37,7 @@ export default function Header() {
       className="fixed inset-x-0 top-0 z-50"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-10">
-        <a
+        <Link
           href="/"
           className={`group relative flex items-center gap-3 overflow-hidden rounded-full border px-3 py-2 backdrop-blur-2xl transition-all duration-500 ${
             scrolled
@@ -44,12 +46,15 @@ export default function Header() {
           }`}
         >
           <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/12 to-transparent transition duration-700 group-hover:translate-x-full" />
-          <img
+          <Image
             src="/company_yoko.png"
             alt="TRADE-ON LLC"
+            width={1755}
+            height={536}
+            priority
             className="relative h-13 w-auto object-contain transition duration-500 group-hover:scale-[1.03] sm:h-16"
           />
-        </a>
+        </Link>
 
         <nav
           className={`hidden items-center gap-9 rounded-full border px-8 py-4 text-sm font-semibold tracking-[0.18em] text-white/85 backdrop-blur-2xl transition-all duration-500 xl:flex ${
@@ -58,21 +63,30 @@ export default function Header() {
               : "border-white/10 bg-black/20"
           }`}
         >
-          {navigationItems.map(([href, en, ja]) => (
-            <a
-              key={en}
-              href={href}
-              className="group relative transition hover:text-white"
-            >
-              <div className="relative z-10 transition duration-300 group-hover:text-cyan-100">
-                {en}
-              </div>
-              <div className="relative z-10 mt-1 text-sm tracking-normal text-white/55 transition duration-300 group-hover:text-white/85">
-                {ja}
-              </div>
-              <span className="absolute -bottom-2 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-gradient-to-r from-fuchsia-400 to-cyan-300 transition-all duration-300 group-hover:w-full" />
-            </a>
-          ))}
+          {navigationItems.map(([href, en, ja]) => {
+            const className = "group relative transition hover:text-white";
+            const content = (
+              <>
+                <div className="relative z-10 transition duration-300 group-hover:text-cyan-100">
+                  {en}
+                </div>
+                <div className="relative z-10 mt-1 text-sm tracking-normal text-white/55 transition duration-300 group-hover:text-white/85">
+                  {ja}
+                </div>
+                <span className="absolute -bottom-2 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-gradient-to-r from-fuchsia-400 to-cyan-300 transition-all duration-300 group-hover:w-full" />
+              </>
+            );
+
+            return href.startsWith("/") ? (
+              <Link key={en} href={href} className={className}>
+                {content}
+              </Link>
+            ) : (
+              <a key={en} href={href} className={className}>
+                {content}
+              </a>
+            );
+          })}
         </nav>
 
         <div
@@ -82,13 +96,13 @@ export default function Header() {
               : "-translate-y-3 opacity-0 sm:translate-y-0 sm:opacity-100"
           }`}
         >
-          <a
+          <Link
             href="/contact"
             className="group relative overflow-hidden rounded-full border border-white/20 bg-white px-6 py-3 text-sm font-black text-black shadow-[0_0_35px_rgba(255,255,255,0.18)] transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_55px_rgba(34,211,238,0.32)] lg:px-8 lg:py-4 lg:text-lg"
           >
             <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-cyan-200/60 to-transparent transition duration-700 group-hover:translate-x-full" />
             <span className="relative">お問い合わせ →</span>
-          </a>
+          </Link>
         </div>
       </div>
     </motion.header>

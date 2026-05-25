@@ -7,8 +7,8 @@ const categoryMap = {
   farm: { code: "FARM", label: "農産物" },
   matcha: { code: "MATCHA", label: "抹茶" },
   luxury: { code: "LUXURY", label: "時計・宝飾" },
-  jewelry: { code: "JEWEL", label: "ジュエリー" },
-  global: { code: "GLOBAL", label: "輸出支援" },
+  jewelry: { code: "OTHER", label: "その他" },
+  global: { code: "GLOBAL", label: "輸出入支援" },
 } as const;
 
 type CategoryKey = keyof typeof categoryMap;
@@ -25,37 +25,27 @@ type ContactBody = {
 
 export async function POST(req: Request) {
   try {
-    const body = (await req.json()) as ContactBody;
+    let body: ContactBody;
 
-    // Turnstile認証確認
-    if (!body.turnstileToken) {
+    try {
+      body = (await req.json()) as ContactBody;
+    } catch {
       return NextResponse.json(
-        { ok: false, message: "認証に失敗しました" },
+        { ok: false, message: "リクエスト形式が不正です" },
         { status: 400 }
       );
     }
 
-    // Turnstile検証
-    const verifyRes = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          secret: process.env.TURNSTILE_SECRET_KEY,
-          response: body.turnstileToken,
-        }),
-      }
-    );
+    const gmailUser = process.env.GMAIL_USER;
+    const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+    const contactTo = process.env.CONTACT_TO;
+    const turnstileSecretKey = process.env.TURNSTILE_SECRET_KEY;
 
-    const verifyData = await verifyRes.json();
-
-    if (!verifyData.success) {
+    if (!gmailUser || !gmailAppPassword || !contactTo || !turnstileSecretKey) {
+      console.error("CONTACT ENV ERROR: required environment variable is missing");
       return NextResponse.json(
-        { ok: false, message: "認証に失敗しました" },
-        { status: 400 }
+        { ok: false, message: "送信設定に不備があります" },
+        { status: 500 }
       );
     }
 
@@ -94,6 +84,38 @@ export async function POST(req: Request) {
     ) {
       return NextResponse.json(
         { ok: false, message: "入力内容が長すぎます" },
+        { status: 400 }
+      );
+    }
+
+    // Turnstile認証確認
+    if (!body.turnstileToken) {
+      return NextResponse.json(
+        { ok: false, message: "認証に失敗しました" },
+        { status: 400 }
+      );
+    }
+
+    // Turnstile検証
+    const verifyRes = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          secret: turnstileSecretKey,
+          response: body.turnstileToken,
+        }),
+      }
+    );
+
+    const verifyData = await verifyRes.json();
+
+    if (!verifyData.success) {
+      return NextResponse.json(
+        { ok: false, message: "認証に失敗しました" },
         { status: 400 }
       );
     }
@@ -166,15 +188,15 @@ ${body.message || "未入力"}
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
+        user: gmailUser,
+        pass: gmailAppPassword,
       },
     });
 
     // 管理者通知
     await transporter.sendMail({
-      from: `合同会社TRADE-ON <${process.env.GMAIL_USER}>`,
-      to: process.env.CONTACT_TO,
+      from: `合同会社TRADE-ON <${gmailUser}>`,
+      to: contactTo,
       replyTo: safeEmail,
       subject: adminSubject,
       text: adminText,
@@ -182,7 +204,7 @@ ${body.message || "未入力"}
 
     // 自動返信
     await transporter.sendMail({
-      from: `TRADE-ON SUPPORT <${process.env.GMAIL_USER}>`,
+      from: `TRADE-ON SUPPORT <${gmailUser}>`,
       to: safeEmail,
       subject: userSubject,
       text: userText,
