@@ -6,12 +6,12 @@ import { Handshake } from "lucide-react";
 
 // Product Cards
 const cards = [
-  { title: "自動車", en: "Used Cars", image: "/cars.png", icon: "/icon-cars.png" },
-  { title: "海産物", en: "Seafood", image: "/seafood.png", icon: "/icon-seafood.png" },
-  { title: "農産物", en: "Agriculture", image: "/farm.png", icon: "/icon-farm.png" },
-  { title: "抹茶", en: "Matcha", image: "/matcha.png", icon: "/icon-matcha.png" },
-  { title: "時計・宝飾", en: "Luxury Goods", image: "/watch.png", icon: "/icon-watch.png" },
-  { title: "その他", en: "Others", image: "/other.png", icon: "/icon-global.png" },
+  { title: "自動車", en: "Used Cars", image: "/cars-card.webp", icon: "/icon-cars.png" },
+  { title: "海産物", en: "Seafood", image: "/seafood-card.webp", icon: "/icon-seafood.png" },
+  { title: "農産物", en: "Agriculture", image: "/farm-card.webp", icon: "/icon-farm.png" },
+  { title: "抹茶", en: "Matcha", image: "/matcha-card.webp", icon: "/icon-matcha.png" },
+  { title: "時計・宝飾", en: "Luxury Goods", image: "/watch-card.webp", icon: "/icon-watch.png" },
+  { title: "その他", en: "Others", image: "/other-card.webp", icon: "/icon-global.png" },
 ];
 
 export default function ProductsSection() {

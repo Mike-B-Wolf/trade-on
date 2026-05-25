@@ -49,8 +49,8 @@ export default function Header() {
           <Image
             src="/company_yoko.png"
             alt="TRADE-ON LLC"
-            width={1755}
-            height={536}
+            width={210}
+            height={64}
             priority
             className="relative h-13 w-auto object-contain transition duration-500 group-hover:scale-[1.03] sm:h-16"
           />
@@ -78,7 +78,7 @@ export default function Header() {
             );
 
             return href.startsWith("/") ? (
-              <Link key={en} href={href} className={className}>
+              <Link key={en} href={href} prefetch={false} className={className}>
                 {content}
               </Link>
             ) : (
@@ -98,6 +98,7 @@ export default function Header() {
         >
           <Link
             href="/contact"
+            prefetch={false}
             className="group relative overflow-hidden rounded-full border border-white/20 bg-white px-6 py-3 text-sm font-black text-black shadow-[0_0_35px_rgba(255,255,255,0.18)] transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_55px_rgba(34,211,238,0.32)] lg:px-8 lg:py-4 lg:text-lg"
           >
             <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-cyan-200/60 to-transparent transition duration-700 group-hover:translate-x-full" />

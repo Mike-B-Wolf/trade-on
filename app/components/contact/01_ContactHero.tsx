@@ -1,9 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import { preload } from "react-dom";
 import { motion } from "framer-motion";
 
 export default function ContactHero() {
+  preload("/earth-contact.webp", { as: "image", fetchPriority: "high" });
+
   return (
     <>
       {/* Background Image */}
@@ -12,7 +15,7 @@ export default function ContactHero() {
         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
         transition={{ duration: 1.4, ease: "easeOut" }}
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/earth-contact.png')" }}
+        style={{ backgroundImage: "url('/earth-contact.webp')" }}
       />
 
       {/* Overlay */}
@@ -31,8 +34,8 @@ export default function ContactHero() {
         <Image
           src="/company.png"
           alt="TRADE-ON"
-          width={1536}
-          height={1024}
+          width={288}
+          height={192}
           priority
           className="h-36 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.22)]"
         />
@@ -48,13 +51,13 @@ export default function ContactHero() {
         {/* Mobile Logo + Label */}
         <div className="relative mx-auto flex w-fit items-center justify-center">
           <Image
-          src="/company.png"
-          alt="TRADE-ON"
-          width={1536}
-          height={1024}
-          priority
-          className="absolute right-full top-1/2 mr-3 h-28 scale-150 -translate-y-1/2 object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.24)] sm:hidden"
-        />
+            src="/company.png"
+            alt="TRADE-ON"
+            width={288}
+            height={192}
+            priority
+            className="absolute right-full top-1/2 mr-3 h-28 scale-150 -translate-y-1/2 object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.24)] sm:hidden"
+          />
 
           <div className="inline-flex rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-2 text-[10px] font-black tracking-[0.36em] text-cyan-200 backdrop-blur">
             CONTACT

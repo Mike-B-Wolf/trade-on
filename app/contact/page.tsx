@@ -10,6 +10,7 @@ export default function ContactPage() {
         {/* Back Link */}
         <Link
           href="/"
+          prefetch={false}
           className="inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-white/5 px-5 py-3 text-sm font-semibold tracking-[0.18em] text-white/80 backdrop-blur-xl transition-all duration-300 hover:border-cyan-300/50 hover:bg-white/10 hover:text-white hover:shadow-[0_0_25px_rgba(34,211,238,0.18)]"
         >
           <span className="text-cyan-300">←</span>

@@ -1,19 +1,34 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { preload } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-const heroImages = ["/earth.png", "/ship.png", "/yama.png"];
+const heroImages = ["/earth.webp", "/ship.webp", "/yama.webp"];
+const heroRotationInterval = 4500;
+const initialHeroRotationDelay = 15000;
 
 export default function HeroSection() {
+  preload(heroImages[0], { as: "image", fetchPriority: "high" });
+
   const [currentHero, setCurrentHero] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentHero((prev) => (prev + 1) % heroImages.length);
-    }, 4500);
+    let interval: ReturnType<typeof setInterval> | undefined;
 
-    return () => clearInterval(interval);
+    const rotateHero = () => {
+      setCurrentHero((prev) => (prev + 1) % heroImages.length);
+    };
+
+    const initialDelay = setTimeout(() => {
+      rotateHero();
+      interval = setInterval(rotateHero, heroRotationInterval);
+    }, initialHeroRotationDelay);
+
+    return () => {
+      clearTimeout(initialDelay);
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   return (

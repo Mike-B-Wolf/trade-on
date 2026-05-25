@@ -22,8 +22,8 @@ export default function Footer() {
           <Image
             src="/company.png"
             alt="TRADE-ON LLC"
-            width={1536}
-            height={1024}
+            width={240}
+            height={160}
             className="h-30 w-auto object-contain"
           />
 

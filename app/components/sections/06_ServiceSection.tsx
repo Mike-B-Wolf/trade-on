@@ -7,7 +7,7 @@ export default function ServiceSection() {
     {
       tag: "SCENES",
       title: "日本の魅力を、世界の市場へ。",
-      image: "/yama.png",
+      image: "/yama.webp",
       color: "cyan",
       text: (
         <>
@@ -25,7 +25,7 @@ export default function ServiceSection() {
     {
       tag: "GLOBAL",
       title: "国内外をつなぐ、確かな貿易体制。",
-      image: "/ship.png",
+      image: "/ship.webp",
       color: "fuchsia",
       text: (
         <>
