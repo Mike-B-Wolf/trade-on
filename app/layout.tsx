@@ -12,9 +12,37 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteTitle = "TRADE-ON";
+const siteDescription = "本物だけを、世界へ。";
+const ogImage = "/TRADEON_OGP.png";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
 export const metadata: Metadata = {
-  title: "TRADE-ON",
-  description: "本物だけを、世界へ。",
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: siteTitle,
+      },
+    ],
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: [ogImage],
+  },
 };
 
 export default function RootLayout({
