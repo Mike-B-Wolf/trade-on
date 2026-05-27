@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     }
 
     const resendApiKey = process.env.RESEND_API_KEY;
-    const mailFrom = process.env.MAIL_FROM || "onboarding@resend.dev";
+    const mailFrom = process.env.MAIL_FROM || "contact@trade-on-company.com";
     const contactTo = process.env.CONTACT_TO;
     const turnstileSecretKey = process.env.TURNSTILE_SECRET_KEY;
 
