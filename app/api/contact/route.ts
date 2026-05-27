@@ -60,11 +60,11 @@ export async function POST(req: Request) {
     }
 
     const resendApiKey = process.env.RESEND_API_KEY;
-    const gmailUser = process.env.GMAIL_USER;
+    const mailFrom = process.env.MAIL_FROM || "onboarding@resend.dev";
     const contactTo = process.env.CONTACT_TO;
     const turnstileSecretKey = process.env.TURNSTILE_SECRET_KEY;
 
-    if (!resendApiKey || !gmailUser || !contactTo || !turnstileSecretKey) {
+    if (!resendApiKey || !contactTo || !turnstileSecretKey) {
       console.error("CONTACT ENV ERROR: required environment variable is missing");
       return NextResponse.json(
         { ok: false, message: "送信設定に不備があります" },
@@ -210,7 +210,7 @@ ${body.message || "未入力"}
 
     // 管理者通知
     await sendEmailWithResend(resendApiKey, {
-      from: gmailUser,
+      from: mailFrom,
       to: contactTo,
       reply_to: safeEmail,
       subject: adminSubject,
@@ -219,7 +219,7 @@ ${body.message || "未入力"}
 
     // 自動返信
     await sendEmailWithResend(resendApiKey, {
-      from: gmailUser,
+      from: mailFrom,
       to: safeEmail,
       subject: userSubject,
       text: userText,
