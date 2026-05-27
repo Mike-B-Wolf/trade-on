@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 
 const categoryMap = {
   auto: { code: "AUTO", label: "自動車" },
@@ -23,6 +22,30 @@ type ContactBody = {
   turnstileToken?: string;
 };
 
+type ResendEmailPayload = {
+  from: string;
+  to: string | string[];
+  reply_to?: string;
+  subject: string;
+  text: string;
+};
+
+async function sendEmailWithResend(apiKey: string, payload: ResendEmailPayload) {
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Resend API error: ${response.status} ${errorText}`);
+  }
+}
+
 export async function POST(req: Request) {
   try {
     let body: ContactBody;
@@ -36,12 +59,12 @@ export async function POST(req: Request) {
       );
     }
 
+    const resendApiKey = process.env.RESEND_API_KEY;
     const gmailUser = process.env.GMAIL_USER;
-    const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
     const contactTo = process.env.CONTACT_TO;
     const turnstileSecretKey = process.env.TURNSTILE_SECRET_KEY;
 
-    if (!gmailUser || !gmailAppPassword || !contactTo || !turnstileSecretKey) {
+    if (!resendApiKey || !gmailUser || !contactTo || !turnstileSecretKey) {
       console.error("CONTACT ENV ERROR: required environment variable is missing");
       return NextResponse.json(
         { ok: false, message: "送信設定に不備があります" },
@@ -185,26 +208,18 @@ ${body.message || "未入力"}
 合同会社TRADE-ON
 `;
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: gmailUser,
-        pass: gmailAppPassword,
-      },
-    });
-
     // 管理者通知
-    await transporter.sendMail({
-      from: `合同会社TRADE-ON <${gmailUser}>`,
+    await sendEmailWithResend(resendApiKey, {
+      from: gmailUser,
       to: contactTo,
-      replyTo: safeEmail,
+      reply_to: safeEmail,
       subject: adminSubject,
       text: adminText,
     });
 
     // 自動返信
-    await transporter.sendMail({
-      from: `TRADE-ON SUPPORT <${gmailUser}>`,
+    await sendEmailWithResend(resendApiKey, {
+      from: gmailUser,
       to: safeEmail,
       subject: userSubject,
       text: userText,

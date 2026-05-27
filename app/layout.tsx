@@ -17,7 +17,7 @@ const siteDescription = "本物だけを、世界へ。";
 const ogImage = "/TRADEON_OGP.png";
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://trade-on-alpha.vercel.app");
+  "https://trade-on-company.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
