@@ -129,11 +129,22 @@ export default function ContactForm() {
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
+      const data = await res.json().catch(() => null);
+
+      const responseSummary = {
+        ok: res.ok,
+        status: res.status,
+        statusText: res.statusText,
+        bodyMessage: data?.message ?? null,
+        bodyOk: data?.ok ?? null,
+      };
+
+      if (!res.ok || data?.ok === false) {
+        console.error("CONTACT FORM RESPONSE ERROR", responseSummary);
         throw new Error(data?.message || "送信に失敗しました");
       }
 
+      console.debug("CONTACT FORM RESPONSE SUCCESS", responseSummary);
       setSuccess(true);
       setForm({
         company: "",
@@ -147,6 +158,7 @@ export default function ContactForm() {
       setTurnstileToken("");
       setTurnstileVerified(false);
     } catch (error) {
+      console.error("CONTACT FORM SUBMIT ERROR", error);
       alert(
         error instanceof Error
           ? error.message
