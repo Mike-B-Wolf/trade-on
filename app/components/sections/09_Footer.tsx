@@ -79,6 +79,18 @@ export default function Footer() {
                 <span>090-6453-3315</span>
               </a>
               <a
+                href="mailto:contact@trade-on-company.com"
+                className="group flex items-center gap-3 transition hover:text-white"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#d4a84f]/20 bg-[#d4a84f]/10">
+                  <Mail className="h-4 w-4 text-[#d4a84f]" />
+                </span>
+
+                <span className="break-all">
+                  contact@trade-on-company.com
+                </span>
+              </a>
+              <a
                 href="fax:05031485847"
                 className="group flex items-center gap-3 transition hover:text-white"
               >
