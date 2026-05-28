@@ -18,4 +18,13 @@
     "trade-on-company.com/*",
     "www.trade-on-company.com/*"
   ]
+
+  ,"env": {
+    "dev": {
+      "name": "trade-on-dev",
+      "routes": [
+        "dev.trade-on-company.com/*"
+      ]
+    }
+  }
 }

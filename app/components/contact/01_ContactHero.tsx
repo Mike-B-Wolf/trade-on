@@ -24,22 +24,7 @@ export default function ContactHero() {
       {/* Top Luxury Line */}
       <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/55 to-transparent" />
 
-      {/* PC Logo */}
-      <motion.div
-        initial={{ opacity: 0, y: -14, filter: "blur(6px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.9, delay: 0.25 }}
-        className="absolute left-10 top-8 z-10 hidden sm:block sm:left-14 sm:top-10"
-      >
-        <Image
-          src="/company.png"
-          alt="TRADE-ON"
-          width={288}
-          height={192}
-          priority
-          className="h-36 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.22)]"
-        />
-      </motion.div>
+      {/* PC logo removed from absolute top-left; will be placed inline with title for lg+ */}
 
       {/* Hero Content */}
       <motion.div
@@ -56,7 +41,7 @@ export default function ContactHero() {
             width={288}
             height={192}
             priority
-            className="absolute right-full top-1/2 mr-3 h-28 scale-150 -translate-y-1/2 object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.24)] sm:hidden"
+            className="absolute right-full top-1/2 mr-3 h-28 scale-150 -translate-y-1/2 object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.24)] md:hidden"
           />
 
           <div className="inline-flex rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-2 text-[10px] font-black tracking-[0.36em] text-cyan-200 backdrop-blur">
@@ -64,9 +49,27 @@ export default function ContactHero() {
           </div>
         </div>
 
-        <h1 className="mt-5 text-4xl font-black tracking-wide sm:text-6xl">
-          お問い合わせ
-        </h1>
+        {/* Header: centered h1; logo absolute inside card for md+ */}
+        {/* Absolute logo is positioned relative to the motion.div (.relative) container */}
+        <div className="w-full">
+          {/* Absolute logo for md+ placed inside card to use card bounds and avoid clipping */}
+          <div className="hidden md:block absolute z-20 left-6 md:left-8 lg:left-16 xl:left-24 top-1/2 -translate-y-1/2">
+            <Image
+              src="/company.png"
+              alt="TRADE-ON"
+              width={288}
+              height={192}
+              priority
+              className="h-24 md:h-32 lg:h-40 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,215,0,0.22)]"
+            />
+          </div>
+
+          <div className="flex justify-center">
+            <h1 className="mx-auto w-fit mt-5 md:mt-10 text-4xl font-black tracking-wide sm:text-6xl whitespace-nowrap">
+              お問い合わせ
+            </h1>
+          </div>
+        </div>
 
         <div className="mx-auto mt-5 h-px w-28 bg-gradient-to-r from-transparent via-cyan-300 to-fuchsia-400" />
 
