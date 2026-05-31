@@ -71,8 +71,8 @@ export default function ProductsSection() {
         {cards.map((card, index) => (
           <motion.article
             key={card.title}
-            initial={isHoverable ? { opacity: 0, y: 28, scale: 0.96 } : { opacity: 0, y: 20 }}
-            whileInView={isHoverable ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: 0 }}
+            initial={isHoverable ? { opacity: 0, y: 28, scale: 0.96 } : { opacity: 1, y: 12, scale: 0.98 }}
+            whileInView={isHoverable ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.65, delay: index * 0.08, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.2 }}
             className="group relative min-h-[18rem] overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:border-cyan-300/35 hover:shadow-[0_0_70px_rgba(34,211,238,0.22)] sm:min-h-[20rem]"
