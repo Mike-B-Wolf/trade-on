@@ -59,13 +59,20 @@ export async function POST(req: Request) {
       );
     }
 
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const mailFrom = process.env.MAIL_FROM || "contact@trade-on-company.com";
-    const contactTo = process.env.CONTACT_TO;
-    const turnstileSecretKey = process.env.TURNSTILE_SECRET_KEY;
+    const trimEnv = (value?: string) => value?.trim() || "";
+    const resendApiKey = trimEnv(process.env.RESEND_API_KEY);
+    const mailFrom = trimEnv(process.env.MAIL_FROM) || "contact@trade-on-company.com";
+    const contactTo = trimEnv(process.env.CONTACT_TO);
+    const turnstileSecretKey = trimEnv(process.env.TURNSTILE_SECRET_KEY);
 
-    if (!resendApiKey || !contactTo || !turnstileSecretKey) {
-      console.error("CONTACT ENV ERROR: required environment variable is missing");
+    const missingEnv = {
+      RESEND_API_KEY: !resendApiKey,
+      CONTACT_TO: !contactTo,
+      TURNSTILE_SECRET_KEY: !turnstileSecretKey,
+    };
+
+    if (Object.values(missingEnv).some(Boolean)) {
+      console.error("CONTACT ENV ERROR: required environment variable is missing", missingEnv);
       return NextResponse.json(
         { ok: false, message: "送信設定に不備があります" },
         { status: 500 }
@@ -135,8 +142,16 @@ export async function POST(req: Request) {
     );
 
     const verifyData = await verifyRes.json();
+    const verifyLog = {
+      success: verifyData.success ?? false,
+      errorCodes: verifyData["error-codes"] ?? null,
+      hostname: verifyData.hostname ?? null,
+      action: verifyData.action ?? null,
+      cdata: verifyData.cdata ?? null,
+    };
 
     if (!verifyData.success) {
+      console.error("CONTACT TURNSTILE ERROR", verifyLog);
       return NextResponse.json(
         { ok: false, message: "認証に失敗しました" },
         { status: 400 }

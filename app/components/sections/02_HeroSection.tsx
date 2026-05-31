@@ -5,8 +5,8 @@ import { preload } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const heroImages = ["/earth.webp", "/ship.webp", "/yama.webp"];
-const heroRotationInterval = 4500;
-const initialHeroRotationDelay = 15000;
+const heroRotationInterval = 4000;
+const initialHeroRotationDelay = 4000;
 
 export default function HeroSection() {
   preload(heroImages[0], { as: "image", fetchPriority: "high" });

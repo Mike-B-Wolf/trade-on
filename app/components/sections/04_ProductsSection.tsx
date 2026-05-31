@@ -15,13 +15,17 @@ const cards = [
 ];
 
 export default function ProductsSection() {
+  const isHoverable =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia !== "undefined" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   return (
     <motion.section
       id="products"
-      initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={isHoverable ? { opacity: 0, y: 40, filter: "blur(10px)" } : false}
+      whileInView={isHoverable ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
       transition={{ duration: 0.9, ease: "easeOut" }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={isHoverable ? { once: true, amount: 0.2 } : undefined}
       className="mx-auto mt-7 grid max-w-7xl gap-6 lg:grid-cols-[0.75fr_1.25fr]"
     >
       {/* Left Content */}
@@ -67,10 +71,10 @@ export default function ProductsSection() {
         {cards.map((card, index) => (
           <motion.article
             key={card.title}
-            initial={{ opacity: 0, y: 28, scale: 0.96 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            initial={isHoverable ? { opacity: 0, y: 28, scale: 0.96 } : { opacity: 1, y: 12, scale: 0.98 }}
+            whileInView={isHoverable ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.65, delay: index * 0.08, ease: "easeOut" }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.2 }}
             className="group relative min-h-[18rem] overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:border-cyan-300/35 hover:shadow-[0_0_70px_rgba(34,211,238,0.22)] sm:min-h-[20rem]"
           >
             {/* Background Image */}
@@ -88,7 +92,7 @@ export default function ProductsSection() {
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/14 to-transparent transition duration-1000 group-hover:translate-x-full" />
 
             {/* Icon */}
-            <div className="absolute left-5 top-5 flex h-14 w-14 items-center justify-center rounded-full border border-fuchsia-400/40 bg-black/45 shadow-[0_0_24px_rgba(168,85,247,0.35)] backdrop-blur-md transition duration-500 group-hover:scale-110 group-hover:border-cyan-300/60 group-hover:shadow-[0_0_36px_rgba(34,211,238,0.32)]">
+            <div className={`absolute left-5 top-5 flex h-14 w-14 items-center justify-center rounded-full border border-fuchsia-400/40 bg-black/45 shadow-[0_0_24px_rgba(168,85,247,0.35)] ${isHoverable ? 'backdrop-blur-md' : ''} transition duration-500 group-hover:scale-110 group-hover:border-cyan-300/60 group-hover:shadow-[0_0_36px_rgba(34,211,238,0.32)]`}>
               <div className="absolute inset-1 rounded-full bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,0.18),transparent_50%)]" />
               <Image
                 src={card.icon}
