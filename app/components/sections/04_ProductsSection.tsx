@@ -22,10 +22,10 @@ export default function ProductsSection() {
   return (
     <motion.section
       id="products"
-      initial={isHoverable ? { opacity: 0, y: 40, filter: "blur(10px)" } : false}
-      whileInView={isHoverable ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
+      initial={isHoverable ? { opacity: 0, y: 40, filter: "blur(10px)" } : { opacity: 0, y: 20 }}
+      whileInView={isHoverable ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 1, y: 0 }}
       transition={{ duration: 0.9, ease: "easeOut" }}
-      viewport={isHoverable ? { once: true, amount: 0.2 } : undefined}
+      viewport={{ once: true, amount: 0.2 }}
       className="mx-auto mt-7 grid max-w-7xl gap-6 lg:grid-cols-[0.75fr_1.25fr]"
     >
       {/* Left Content */}
@@ -71,10 +71,10 @@ export default function ProductsSection() {
         {cards.map((card, index) => (
           <motion.article
             key={card.title}
-            initial={isHoverable ? { opacity: 0, y: 28, scale: 0.96 } : false}
-            whileInView={isHoverable ? { opacity: 1, y: 0, scale: 1 } : undefined}
+            initial={isHoverable ? { opacity: 0, y: 28, scale: 0.96 } : { opacity: 0, y: 20 }}
+            whileInView={isHoverable ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: index * 0.08, ease: "easeOut" }}
-            viewport={isHoverable ? { once: true } : undefined}
+            viewport={{ once: true, amount: 0.2 }}
             className="group relative min-h-[18rem] overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:border-cyan-300/35 hover:shadow-[0_0_70px_rgba(34,211,238,0.22)] sm:min-h-[20rem]"
           >
             {/* Background Image */}
