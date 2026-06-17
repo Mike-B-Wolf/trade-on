@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ContactPageContent from "../../components/contact/ContactPageContent";
 import { en } from "@/locales/en";
+import { ogImage, ogImageUrl } from "../../metadata";
 
 export const metadata: Metadata = {
   title: en.contactPage.meta.title,
@@ -10,12 +11,13 @@ export const metadata: Metadata = {
     description: en.contactPage.meta.description,
     url: "/en/contact",
     locale: "en_US",
-    images: ["/TRADEON_OGP.png"],
+    images: [ogImage],
   },
   twitter: {
+    card: "summary_large_image",
     title: en.contactPage.meta.title,
     description: en.contactPage.meta.description,
-    images: ["/TRADEON_OGP.png"],
+    images: [ogImageUrl],
   },
   alternates: {
     canonical: "/en/contact",

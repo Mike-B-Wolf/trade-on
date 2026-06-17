@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ja } from "@/locales/ja";
+import { ogImage, ogImageUrl } from "./metadata";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,7 +28,6 @@ const siteKeywords = [
   "食品輸出",
   "international trade",
 ];
-const ogImage = "/TRADEON_OGP.png";
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") ||
   "https://trade-on-company.com";
@@ -43,14 +43,7 @@ export const metadata: Metadata = {
     description: siteDescription,
     url: siteUrl,
     siteName,
-    images: [
-      {
-        url: ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteName,
-      },
-    ],
+    images: [ogImage],
     locale: "ja_JP",
     type: "website",
   },
@@ -58,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: [ogImage],
+    images: [ogImageUrl],
   },
   alternates: {
     canonical: siteUrl,
