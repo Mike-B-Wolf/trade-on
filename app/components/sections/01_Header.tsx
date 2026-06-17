@@ -60,7 +60,7 @@ export default function Header({ lang, dict }: HeaderProps) {
             width={210}
             height={64}
             priority
-            className="relative h-13 w-auto object-contain transition duration-500 group-hover:scale-[1.03] sm:h-16"
+            className="relative h-[23px] w-auto object-contain transition duration-500 group-hover:scale-[1.03] min-[390px]:h-[28px] min-[412px]:h-[35px] sm:h-16"
           />
         </Link>
 
