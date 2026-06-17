@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ja } from "@/locales/ja";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,10 +14,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteTitle = "TRADE-ON｜本物だけを、世界へ。";
+const siteTitle = ja.meta.title;
 const siteName = "TRADE-ON";
-const siteDescription =
-  "TRADE-ONは、食品・車両関連をはじめとした国内外の貿易・販売マッチングを支援する企業です。本物の価値を、必要とする市場へ届けます。";
+const siteDescription = ja.meta.description;
 const siteKeywords = [
   "TRADE-ON",
   "貿易",

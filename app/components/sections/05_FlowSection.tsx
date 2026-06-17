@@ -1,16 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Dictionary } from "@/locales/types";
 
-const flowSteps = [
-  "お問い合わせ",
-  "ご要望ヒアリング",
-  "お見積ご提案",
-  "輸出入 開始",
-  "アフターサポート",
-];
+type FlowSectionProps = {
+  dict: Dictionary["flow"];
+};
 
-export default function FlowSection() {
+export default function FlowSection({ dict }: FlowSectionProps) {
   return (
     <motion.section
       id="flow"
@@ -36,11 +33,11 @@ export default function FlowSection() {
           className="relative text-center"
         >
           <div className="inline-flex rounded-full border border-fuchsia-300/20 bg-fuchsia-400/10 px-4 py-1.5 text-[10px] font-black tracking-[0.28em] text-fuchsia-200">
-            FLOW
+            {dict.badge}
           </div>
 
           <h2 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
-            ご利用の流れ
+            {dict.title}
           </h2>
 
           <div className="mx-auto mt-4 h-px w-24 bg-gradient-to-r from-fuchsia-400 via-cyan-300 to-transparent" />
@@ -48,7 +45,7 @@ export default function FlowSection() {
 
         {/* Flow */}
         <div className="relative mt-8 grid gap-6 md:mt-10 md:grid-cols-5 md:gap-4">
-          {flowSteps.map((step, index) => (
+          {dict.steps.map((step, index) => (
             <motion.div
               key={step}
               initial={{ opacity: 0, y: 16 }}
@@ -61,7 +58,7 @@ export default function FlowSection() {
               className="relative text-center"
             >
               {/* Arrow PC only */}
-              {index !== flowSteps.length - 1 && (
+              {index !== dict.steps.length - 1 && (
                 <div className="absolute left-1/2 top-7 hidden w-full -translate-y-1/2 lg:block">
                   <div className="flex items-center justify-center">
                     <span className="text-3xl font-light text-cyan-200/55">

@@ -2,16 +2,20 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import type { Dictionary } from "@/locales/types";
 
-// Company Stats
-const stats = [
-  { label: "取引国", value: "10", suffix: "カ国以上", icon: "/icon-global.png" },
-  { label: "年間取引件数", value: "100", suffix: "件以上", icon: "/icon-growth.png" },
-  { label: "顧客満足度", value: "98%", suffix: "以上", icon: "/icon-star.png" },
-  { label: "取扱商品数", value: "300", suffix: "種類以上", icon: "/icon-bag.png" },
+const statIcons = [
+  "/icon-global.png",
+  "/icon-growth.png",
+  "/icon-star.png",
+  "/icon-bag.png",
 ];
 
-export default function StatsSection() {
+type StatsSectionProps = {
+  dict: Dictionary["stats"];
+};
+
+export default function StatsSection({ dict }: StatsSectionProps) {
   return (
     <motion.section
       id="strength"
@@ -22,7 +26,7 @@ export default function StatsSection() {
       className="mx-auto max-w-7xl rounded-[2rem] border border-white/10 bg-[#07101f]/72 px-6 py-6 shadow-[0_0_60px_rgba(34,211,238,0.06)] backdrop-blur-xl sm:px-8"
     >
       <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
-        {stats.map((item, index) => (
+        {dict.map((item, index) => (
           <motion.div
             key={item.label}
             initial={{ opacity: 0, y: 18 }}
@@ -34,7 +38,7 @@ export default function StatsSection() {
             {/* Icon */}
             <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-fuchsia-400/35 bg-black/35 shadow-[0_0_35px_rgba(139,92,246,0.22)] backdrop-blur sm:h-24 sm:w-24">
               <Image
-                src={item.icon}
+                src={statIcons[index]}
                 alt={item.label}
                 width={96}
                 height={96}

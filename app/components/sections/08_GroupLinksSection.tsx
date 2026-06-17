@@ -10,11 +10,10 @@ import {
   ExternalLink,
   Camera,
 } from "lucide-react";
+import type { Dictionary } from "@/locales/types";
 
 const groupLinks = [
   {
-    name: "TRADE-ON LLC",
-    description: "貿易事業・ブランド事業",
     logo: "/company.png",
     logoClass: "scale-165 p-0 translate-y-1",
     instagram:
@@ -22,8 +21,6 @@ const groupLinks = [
     line: "https://lin.ee/N2prwfY",
   },
   {
-    name: "カーマッチ青森弘前店",
-    description: "自動車販売・買取",
     logo: "/carmatch.png",
     logoClass: "scale-110 p-1 translate-y-1",
     instagram:
@@ -31,8 +28,6 @@ const groupLinks = [
     line: "https://lin.ee/OfPSHAH",
   },
   {
-    name: "HIGH END",
-    description: "高級腕時計・ジュエリー",
     logo: "/highend.jpg",
     logoClass: "scale-105 p-1 translate-y-1",
     instagram:
@@ -41,7 +36,11 @@ const groupLinks = [
   },
 ];
 
-export default function GroupLinksSection() {
+type GroupLinksSectionProps = {
+  dict: Dictionary["groupLinks"];
+};
+
+export default function GroupLinksSection({ dict }: GroupLinksSectionProps) {
   return (
     <section className="relative overflow-hidden bg-[#050c16] px-5 py-8 sm:px-8 lg:px-10">
       <motion.div
@@ -56,24 +55,27 @@ export default function GroupLinksSection() {
 
         <div className="relative text-center">
           <div className="mx-auto inline-flex rounded-full border border-cyan-300/30 bg-cyan-300/8 px-5 py-2 text-[11px] font-black tracking-[0.32em] text-cyan-200">
-            OFFICIAL LINKS
+            {dict.badge}
           </div>
 
           <h2 className="mt-5 text-3xl font-black tracking-tight text-white sm:text-4xl">
-            公式SNS・関連事業
+            {dict.title}
           </h2>
 
           <div className="mx-auto mt-4 h-px w-20 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
 
           <p className="mx-auto mt-6 max-w-2xl text-sm leading-5 text-white/62 sm:text-lg">
-            各ブランドの最新情報や取り組みを、SNSで発信しています。
+            {dict.description}
           </p>
         </div>
 
         <div className="relative mt-10 grid gap-5 lg:grid-cols-3">
-          {groupLinks.map((item, index) => (
+          {groupLinks.map((item, index) => {
+            const copy = dict.items[index];
+
+            return (
             <motion.div
-              key={item.name}
+              key={copy.name}
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: index * 0.08 }}
@@ -84,7 +86,7 @@ export default function GroupLinksSection() {
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/20">
                   <Image
                     src={item.logo}
-                    alt={item.name}
+                    alt={copy.name}
                     width={160}
                     height={160}
                     className={`h-full w-full object-contain ${item.logoClass}`}
@@ -93,10 +95,10 @@ export default function GroupLinksSection() {
 
                 <div>
                   <h3 className="text-xl font-black tracking-wide text-white">
-                    {item.name}
+                    {copy.name}
                   </h3>
                   <p className="mt-1 text-base text-white/54">
-                    {item.description}
+                    {copy.description}
                   </p>
                 </div>
               </div>
@@ -130,14 +132,15 @@ export default function GroupLinksSection() {
                     <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-500">
                       <MessageCircle className="h-4 w-4 text-white" />
                     </span>
-                    LINE公式アカウント
+                    {dict.lineLabel}
                   </span>
 
                   <ExternalLink className="h-4 w-4 opacity-60 transition group-hover/link:opacity-100" />
                 </a>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
     </section>

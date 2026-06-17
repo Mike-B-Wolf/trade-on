@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ContactTurnstile from "./04_ContactTurnstile";
 import ContactSubmitButton from "./05_ContactSubmitButton";
 import FadeUp from "../ui/FadeUp";
+import type { Dictionary, Locale } from "@/locales/types";
 
 declare global {
   interface Window {
@@ -13,17 +14,13 @@ declare global {
   }
 }
 
-const categories = [
-  { key: "auto", label: "自動車", code: "AUTO" },
-  { key: "seafood", label: "海産物", code: "SEA" },
-  { key: "farm", label: "農産物", code: "FARM" },
-  { key: "matcha", label: "抹茶", code: "MATCHA" },
-  { key: "luxury", label: "時計・宝飾", code: "LUXURY" },
-  { key: "global", label: "輸出入支援", code: "GLOBAL" },
-  { key: "jewelry", label: "その他", code: "OTHER" },
-];
+type ContactFormProps = {
+  lang: Locale;
+  dict: Dictionary["contactPage"]["form"];
+};
 
-export default function ContactForm() {
+export default function ContactForm({ lang, dict }: ContactFormProps) {
+  const categories = dict.categories;
   const [turnstileToken, setTurnstileToken] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(categories[0].key);
   const [form, setForm] = useState({
@@ -68,17 +65,17 @@ export default function ContactForm() {
     const newErrors: Record<string, string> = {};
 
     if (!form.name.trim()) {
-      newErrors.name = "ご担当者名は必須です";
+      newErrors.name = dict.errors.nameRequired;
     }
 
     if (!form.email.trim()) {
-      newErrors.email = "メールアドレスは必須です";
+      newErrors.email = dict.errors.emailRequired;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = "メールアドレスの形式をご確認ください";
+      newErrors.email = dict.errors.emailInvalid;
     }
 
     if (!form.message.trim()) {
-      newErrors.message = "お問い合わせ内容は必須です";
+      newErrors.message = dict.errors.messageRequired;
     }
 
     setErrors(newErrors);
@@ -110,7 +107,7 @@ export default function ContactForm() {
     if (!validate()) return;
 
     if (!turnstileToken) {
-      alert("認証を完了してください");
+      alert(dict.errors.turnstileRequired);
       return;
     }
 
@@ -124,6 +121,7 @@ export default function ContactForm() {
         },
         body: JSON.stringify({
           ...form,
+          lang,
           category: selectedCategory,
           turnstileToken,
         }),
@@ -141,7 +139,7 @@ export default function ContactForm() {
 
       if (!res.ok || data?.ok === false) {
         console.error("CONTACT FORM RESPONSE ERROR", responseSummary);
-        throw new Error(data?.message || "送信に失敗しました");
+        throw new Error(data?.message || dict.errors.submitFailed);
       }
 
       console.debug("CONTACT FORM RESPONSE SUCCESS", responseSummary);
@@ -162,7 +160,7 @@ export default function ContactForm() {
       alert(
         error instanceof Error
           ? error.message
-          : "送信に失敗しました。時間をおいて再度お試しください。"
+          : dict.errors.submitFailedRetry
       );
     } finally {
       setLoading(false);
@@ -184,11 +182,11 @@ export default function ContactForm() {
       <div className="relative">
         <div className="mb-5">
           <div className="text-[10px] font-black tracking-[0.32em] text-cyan-200/70">
-            CATEGORY
+            {dict.categoryBadge}
           </div>
 
           <div className="mt-2 text-lg font-black tracking-tight text-white sm:text-xl">
-            お問い合わせカテゴリ
+            {dict.categoryTitle}
           </div>
         </div>
 
@@ -237,7 +235,7 @@ export default function ContactForm() {
         <div className="grid gap-5 md:grid-cols-2">
           <div>
             <label className="mb-2 block text-sm font-bold text-white/82">
-              会社名
+              {dict.fields.company.label}
             </label>
 
             <input
@@ -247,13 +245,14 @@ export default function ContactForm() {
               maxLength={100}
               onChange={handleChange}
               className={inputClass()}
-              placeholder="例）株式会社TRADE-ON"
+              placeholder={dict.fields.company.placeholder}
             />
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-bold text-white/82">
-              ご担当者名 <span className="text-fuchsia-300">*</span>
+              {dict.fields.name.label}{" "}
+              <span className="text-fuchsia-300">*</span>
             </label>
 
             <input
@@ -263,7 +262,7 @@ export default function ContactForm() {
               maxLength={50}
               onChange={handleChange}
               className={inputClass(!!errors.name)}
-              placeholder="山田 太郎"
+              placeholder={dict.fields.name.placeholder}
             />
 
             {errors.name && (
@@ -277,7 +276,8 @@ export default function ContactForm() {
         <div className="grid gap-5 md:grid-cols-2">
           <div>
             <label className="mb-2 block text-sm font-bold text-white/82">
-              メールアドレス <span className="text-fuchsia-300">*</span>
+              {dict.fields.email.label}{" "}
+              <span className="text-fuchsia-300">*</span>
             </label>
 
             <input
@@ -287,7 +287,7 @@ export default function ContactForm() {
               maxLength={100}
               onChange={handleChange}
               className={inputClass(!!errors.email)}
-              placeholder="例）info@tradeon.co.jp"
+              placeholder={dict.fields.email.placeholder}
             />
 
             {errors.email && (
@@ -299,7 +299,7 @@ export default function ContactForm() {
 
           <div>
             <label className="mb-2 block text-sm font-bold text-white/82">
-              電話番号
+              {dict.fields.phone.label}
             </label>
 
             <input
@@ -309,14 +309,15 @@ export default function ContactForm() {
               maxLength={30}
               onChange={handleChange}
               className={inputClass()}
-              placeholder="090-1234-5678"
+              placeholder={dict.fields.phone.placeholder}
             />
           </div>
         </div>
 
         <div>
           <label className="mb-2 block text-sm font-bold text-white/82">
-            お問い合わせ内容 <span className="text-fuchsia-300">*</span>
+            {dict.fields.message.label}{" "}
+            <span className="text-fuchsia-300">*</span>
           </label>
 
           <textarea
@@ -326,7 +327,7 @@ export default function ContactForm() {
             onChange={handleChange}
             rows={6}
             className={`${inputClass(!!errors.message)} resize-none leading-7`}
-            placeholder="お問い合わせ内容をご入力ください..."
+            placeholder={dict.fields.message.placeholder}
           />
 
           {errors.message && (
@@ -338,8 +339,9 @@ export default function ContactForm() {
       </div>
 
       <div className="mt-8 rounded-2xl border border-fuchsia-300/30 bg-fuchsia-500/[0.045] px-5 py-4 text-sm leading-7 text-white/72 shadow-[0_0_32px_rgba(217,70,239,0.08)]">
-        <div>送信後、合同会社TRADE-ONより自動返信メールをお送りします。</div>
-        <div>内容を確認後、担当者より2営業日以内にご連絡いたします。</div>
+        {dict.noticeLines.map((line) => (
+          <div key={line}>{line}</div>
+        ))}
       </div>
 
       <div className="relative mt-14">
@@ -351,10 +353,14 @@ export default function ContactForm() {
           )}
         </AnimatePresence>
 
-        <ContactSubmitButton loading={loading} />
+        <ContactSubmitButton
+          loading={loading}
+          label={dict.submit}
+          loadingLabel={dict.submitting}
+        />
 
         <div className="mt-6 text-center text-xs leading-6 text-white/34">
-          ご入力いただいた情報は、お問い合わせ対応以外の目的では使用いたしません。
+          {dict.privacy}
         </div>
       </div>
 
@@ -376,9 +382,11 @@ export default function ContactForm() {
 
               <div className="relative">
                 <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-white/20 border-t-fuchsia-300" />
-                <div className="mt-5 text-lg font-black">送信中...</div>
+                <div className="mt-5 text-lg font-black">
+                  {dict.loadingTitle}
+                </div>
                 <div className="mt-2 text-sm text-white/60">
-                  お問い合わせ内容を送信しています
+                  {dict.loadingText}
                 </div>
               </div>
             </motion.div>
@@ -416,25 +424,28 @@ export default function ContactForm() {
                 </div>
 
                 <div className="mt-7 text-center text-[11px] font-bold tracking-[0.35em] text-emerald-300/80">
-                  MESSAGE SENT
+                  {dict.successBadge}
                 </div>
 
                 <div className="mt-3 text-center text-3xl font-black tracking-wide">
-                  送信完了
+                  {dict.successTitle}
                 </div>
 
                 <div className="mx-auto mt-4 h-px w-24 bg-gradient-to-r from-transparent via-emerald-300/70 to-transparent" />
 
                 <div className="mt-5 text-center text-sm leading-7 text-white/75">
-                  お問い合わせありがとうございます。
-                  <br />
-                  内容を確認後、担当者よりご連絡いたします。
+                  {dict.successBodyLines.map((line, index) => (
+                    <span key={line}>
+                      {index > 0 && <br />}
+                      {line}
+                    </span>
+                  ))}
                 </div>
 
                 <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
                   <div className="flex items-center justify-between text-xs text-white/45">
-                    <span>TRADE-ON</span>
-                    <span>受付完了</span>
+                    <span>{dict.successCompany}</span>
+                    <span>{dict.successStatus}</span>
                   </div>
 
                   <div className="mt-3 h-[4px] overflow-hidden rounded-full bg-white/10">

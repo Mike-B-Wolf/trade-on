@@ -3,8 +3,13 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Phone, Mail, Printer } from "lucide-react";
+import type { Dictionary } from "@/locales/types";
 
-export default function Footer() {
+type FooterProps = {
+  dict: Dictionary["footer"];
+};
+
+export default function Footer({ dict }: FooterProps) {
   return (
     <motion.footer
       initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
@@ -28,9 +33,12 @@ export default function Footer() {
           />
 
           <p className="max-w-[240px] text-xs leading-6 text-white/52 sm:text-sm">
-            日本の良いモノを世界へ、
-            <br />
-            価値あるものづくりを支援します。
+            {dict.taglineLines.map((line, index) => (
+              <span key={line}>
+                {index > 0 && <br />}
+                {line}
+              </span>
+            ))}
           </p>
         </div>
 
@@ -39,16 +47,11 @@ export default function Footer() {
           {/* MENU */}
           <div>
             <div className="text-[10px] font-black tracking-[0.28em] text-cyan-200/75">
-              MENU
+              {dict.menuTitle}
             </div>
 
             <div className="mt-3 grid gap-1 text-sm text-white/66">
-              {[
-                ["#service", "サービス"],
-                ["#products", "取扱商品"],
-                ["#flow", "ご利用の流れ"],
-                ["/contact", "お問い合わせ"],
-              ].map(([href, label]) => (
+              {dict.menu.map(({ href, label }) => (
                 <a
                   key={label}
                   href={href}
@@ -64,7 +67,7 @@ export default function Footer() {
           {/* CONTACT */}
           <div>
             <div className="text-[10px] font-black tracking-[0.28em] text-fuchsia-200/75">
-              CONTACT
+              {dict.contactTitle}
             </div>
 
             <div className="mt-3 space-y-1 text-sm text-white/66">
@@ -136,7 +139,7 @@ export default function Footer() {
                 </span>
 
                 <span className="leading-6">
-                  青森県弘前市大字城東中央3丁目1番地24
+                  {dict.address}
                 </span>
               </div>
             </div>
@@ -146,7 +149,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="border-t border-white/10 px-4 py-2 text-center text-[11px] tracking-[0.18em] text-white/30">
-        © 2026 TRADE-ON LLC. All rights reserved.
+        {dict.copyright}
       </div>
     </motion.footer>
   );

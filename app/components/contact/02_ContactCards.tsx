@@ -1,26 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Dictionary } from "@/locales/types";
 
-const cards = [
-  {
-    en: "GLOBAL",
-    title: "国内外の取引相談",
-    text: "輸出入・仕入れ・販売ルートに関するご相談",
-  },
-  {
-    en: "QUALITY",
-    title: "品質・商品確認",
-    text: "車両・食品・日用品などの商品確認に対応",
-  },
-  {
-    en: "SUPPORT",
-    title: "担当者対応",
-    text: "内容確認後、担当者より順次ご連絡",
-  },
-];
+type ContactCardsProps = {
+  dict: Dictionary["contactPage"]["cards"];
+};
 
-export default function ContactCards() {
+export default function ContactCards({ dict }: ContactCardsProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 26, filter: "blur(8px)" }}
@@ -29,7 +16,7 @@ export default function ContactCards() {
       viewport={{ once: true, amount: 0.2 }}
       className="relative mx-auto grid max-w-5xl gap-4 px-4 pb-5 sm:grid-cols-3 sm:px-10"
     >
-      {cards.map((card, index) => (
+      {dict.map((card, index) => (
         <motion.div
           key={card.en}
           initial={{ opacity: 0, y: 18 }}

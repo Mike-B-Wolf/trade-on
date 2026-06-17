@@ -3,8 +3,13 @@
 import Image from "next/image";
 import { preload } from "react-dom";
 import { motion } from "framer-motion";
+import type { Dictionary } from "@/locales/types";
 
-export default function ContactHero() {
+type ContactHeroProps = {
+  dict: Dictionary["contactPage"]["hero"];
+};
+
+export default function ContactHero({ dict }: ContactHeroProps) {
   preload("/earth-contact.webp", { as: "image", fetchPriority: "high" });
 
   return (
@@ -45,7 +50,7 @@ export default function ContactHero() {
           />
 
           <div className="inline-flex rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-2 text-[10px] font-black tracking-[0.36em] text-cyan-200 backdrop-blur">
-            CONTACT
+            {dict.badge}
           </div>
         </div>
 
@@ -66,7 +71,7 @@ export default function ContactHero() {
 
           <div className="flex justify-center">
             <h1 className="mx-auto w-fit mt-5 md:mt-10 text-4xl font-black tracking-wide sm:text-6xl whitespace-nowrap">
-              お問い合わせ
+              {dict.title}
             </h1>
           </div>
         </div>
@@ -74,9 +79,12 @@ export default function ContactHero() {
         <div className="mx-auto mt-5 h-px w-28 bg-gradient-to-r from-transparent via-cyan-300 to-fuchsia-400" />
 
         <p className="mx-auto mt-6 max-w-2xl text-sm leading-8 text-white/74 sm:text-base">
-          商品・お取引・輸出入に関するご相談を承ります。
-          <br />
-          内容を確認のうえ、担当者よりご連絡いたします。
+          {dict.bodyLines.map((line, index) => (
+            <span key={line}>
+              {index > 0 && <br />}
+              {line}
+            </span>
+          ))}
         </p>
       </motion.div>
     </>

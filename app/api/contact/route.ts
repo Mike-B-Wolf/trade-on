@@ -1,18 +1,24 @@
 import { NextResponse } from "next/server";
 
 const categoryMap = {
-  auto: { code: "AUTO", label: "自動車" },
-  seafood: { code: "SEA", label: "海産物" },
-  farm: { code: "FARM", label: "農産物" },
-  matcha: { code: "MATCHA", label: "抹茶" },
-  luxury: { code: "LUXURY", label: "時計・宝飾" },
-  jewelry: { code: "OTHER", label: "その他" },
-  global: { code: "GLOBAL", label: "輸出入支援" },
+  auto: { code: "AUTO", label: "自動車", labelEn: "Automobiles" },
+  seafood: { code: "SEA", label: "海産物", labelEn: "Seafood" },
+  farm: { code: "FARM", label: "農産物", labelEn: "Agricultural Products" },
+  matcha: { code: "MATCHA", label: "抹茶", labelEn: "Matcha" },
+  luxury: { code: "LUXURY", label: "時計・宝飾", labelEn: "Watches & Jewelry" },
+  jewelry: { code: "OTHER", label: "その他", labelEn: "Other" },
+  global: { code: "GLOBAL", label: "輸出入支援", labelEn: "Import / Export" },
 } as const;
 
 type CategoryKey = keyof typeof categoryMap;
+type SelectedCategory = {
+  code: string;
+  label: string;
+  labelEn?: string;
+};
 
 type ContactBody = {
+  lang?: string;
   category?: CategoryKey;
   company?: string;
   name?: string;
@@ -166,7 +172,9 @@ export async function POST(req: Request) {
         ? body.category
         : "auto";
 
-    const selected = categoryMap[categoryKey];
+    const selected: SelectedCategory = categoryMap[categoryKey];
+    const lang = body.lang === "en" ? "en" : "ja";
+    const adminLanguageLabel = lang === "en" ? "English" : "日本語";
 
     const adminSubject = `【${selected.code}（${selected.label}）】お問い合わせがありました`;
 
@@ -174,6 +182,8 @@ export async function POST(req: Request) {
 合同会社TRADE-ON
 
 お問い合わせがありました。
+
+送信ページ言語：${adminLanguageLabel}
 
 ■カテゴリ
 ${selected.label}（${selected.code}）
@@ -238,6 +248,44 @@ TEL：090-6453-3315
 お手数ですが破棄していただきますようお願いいたします。
 `;
 
+    const userSubjectEn = "Thank You for Contacting TRADE-ON LLC";
+
+    const userTextEn = `Dear ${body.name || "Customer"},
+
+Thank you for contacting TRADE-ON LLC.
+
+We have received your inquiry with the following details.
+
+---
+
+Category
+${selected.labelEn || selected.label} (${selected.code})
+
+Message
+${body.message || "Not provided"}
+
+---
+
+A member of our team will review your inquiry and contact you shortly.
+
+If you do not receive a reply after a few days, or if your inquiry is urgent,
+please contact us by phone.
+
+TEL: +81-90-6453-3315
+
+━━━━━━━━━━━━━━━━━━
+TRADE-ON LLC
+Authentic Quality, Delivered Worldwide.
+
+Web: [https://trade-on-company.com/en](https://trade-on-company.com/en)
+Mail: [contact@trade-on-company.com](mailto:contact@trade-on-company.com)
+TEL: +81-90-6453-3315
+━━━━━━━━━━━━━━━━━━
+
+This is an automated email.
+If you did not submit this inquiry, please disregard this message.
+`;
+
     // 管理者通知
     await sendEmailWithResend(resendApiKey, {
       from: mailFrom,
@@ -251,8 +299,8 @@ TEL：090-6453-3315
     await sendEmailWithResend(resendApiKey, {
       from: mailFrom,
       to: safeEmail,
-      subject: userSubject,
-      text: userText,
+      subject: lang === "en" ? userSubjectEn : userSubject,
+      text: lang === "en" ? userTextEn : userText,
     });
 
     return NextResponse.json({ ok: true });

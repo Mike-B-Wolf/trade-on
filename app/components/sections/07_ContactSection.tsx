@@ -1,8 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Dictionary } from "@/locales/types";
 
-export default function ContactSection() {
+type ContactSectionProps = {
+  dict: Dictionary["contactCta"];
+};
+
+export default function ContactSection({ dict }: ContactSectionProps) {
   return (
     <motion.section
       id="contact"
@@ -18,28 +23,31 @@ export default function ContactSection() {
 
         <div className="relative">
           <div className="inline-flex rounded-full border border-cyan-300/25 bg-cyan-400/10 px-4 py-2 text-xs font-black tracking-[0.3em] text-cyan-200 shadow-[0_0_30px_rgba(34,211,238,0.14)]">
-            CONTACT
+            {dict.badge}
           </div>
 
           <h2 className="mt-5 text-4xl font-black tracking-tight sm:text-5xl">
-            お問い合わせ
+            {dict.title}
           </h2>
 
           <div className="mx-auto mt-5 h-px w-28 bg-gradient-to-r from-transparent via-cyan-300 to-transparent" />
 
           <p className="mx-auto mt-6 max-w-3xl text-sm leading-8 text-white/72 sm:text-lg">
-            商品やサービスに関するご質問やご相談がありましたら、お気軽にご連絡ください。
-            <br className="hidden sm:block" />
-            ご要望に合わせて、最適なご提案をいたします。
+            {dict.bodyLines.map((line, index) => (
+              <span key={line}>
+                {index > 0 && <br className="hidden sm:block" />}
+                {line}
+              </span>
+            ))}
           </p>
 
           <div className="mt-8">
             <a
-              href="/contact"
+              href={dict.href}
               className="group relative inline-flex overflow-hidden rounded-full border border-cyan-300/40 bg-[linear-gradient(90deg,#d100ff_0%,#7b3cff_45%,#2563ff_100%)] px-9 py-4 text-base font-black text-white shadow-[0_0_45px_rgba(124,58,237,0.35)] transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_70px_rgba(34,211,238,0.35)]"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition duration-700 group-hover:translate-x-full" />
-              <span className="relative">メールで問い合わせる →</span>
+              <span className="relative">{dict.button}</span>
             </a>
           </div>
         </div>

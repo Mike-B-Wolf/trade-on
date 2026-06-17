@@ -3,15 +3,22 @@
 import { useEffect, useState } from "react";
 import { preload } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import type { Dictionary, Locale } from "@/locales/types";
 
 const heroImages = ["/earth.webp", "/ship.webp", "/yama.webp"];
 const heroRotationInterval = 4000;
 const initialHeroRotationDelay = 4000;
 
-export default function HeroSection() {
+type HeroSectionProps = {
+  lang: Locale;
+  dict: Dictionary["hero"];
+};
+
+export default function HeroSection({ lang, dict }: HeroSectionProps) {
   preload(heroImages[0], { as: "image", fetchPriority: "high" });
 
   const [currentHero, setCurrentHero] = useState(0);
+  const isEnglish = lang === "en";
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | undefined;
@@ -78,16 +85,24 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 46, filter: "blur(14px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.05, delay: 0.25, ease: "easeOut" }}
-            className="max-w-2xl pt-4 lg:pt-12"
+            className={`pt-4 lg:pt-12 ${
+              isEnglish ? "max-w-[48rem] pr-5 sm:pr-8 lg:pr-10" : "max-w-2xl"
+            }`}
           >
-            <h1 className="text-[3.2rem] font-semibold leading-[1.15] tracking-tight sm:text-6xl lg:text-7xl xl:text-[6.3rem]">
+            <h1
+              className={`font-semibold tracking-tight ${
+                isEnglish
+                  ? "text-[2.05rem] leading-[1.08] sm:text-5xl lg:text-[3.95rem] xl:text-[4.15rem]"
+                  : "text-[3.2rem] leading-[1.15] sm:text-6xl lg:text-7xl xl:text-[6.3rem]"
+              }`}
+            >
               <motion.span
                 initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 transition={{ duration: 0.85, delay: 0.55 }}
                 className="block whitespace-nowrap"
               >
-                本物だけを、
+                {dict.titleLine1}
               </motion.span>
 
               <motion.span
@@ -96,7 +111,7 @@ export default function HeroSection() {
                 transition={{ duration: 0.85, delay: 0.75 }}
                 className="block whitespace-nowrap bg-gradient-to-r from-white via-cyan-100 to-fuchsia-200 bg-clip-text text-transparent drop-shadow-[0_0_24px_rgba(168,85,247,0.25)]"
               >
-                世界へ
+                {dict.titleLine2}
               </motion.span>
             </h1>
 
@@ -106,14 +121,17 @@ export default function HeroSection() {
               transition={{ duration: 0.9, delay: 1 }}
               className="mt-6 max-w-xl text-sm leading-8 text-white/82 sm:mt-8 sm:text-base md:text-lg md:leading-9"
             >
-              合同会社TRADE-ONは、
-              国内外をつなぐ貿易パートナーとして、
-              日本の高品質な商品を世界へ届け、
-              世界中の価値ある商品を日本へお届けしています。
-              <br />
-              <br />
-              信頼と品質を大切に、
-              柔軟かつ丁寧な取引をサポートいたします。
+              {dict.body.map((paragraph, index) => (
+                <span key={paragraph}>
+                  {index > 0 && (
+                    <>
+                      <br />
+                      <br />
+                    </>
+                  )}
+                  {paragraph}
+                </span>
+              ))}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -128,15 +146,15 @@ export default function HeroSection() {
                 className="group relative overflow-hidden rounded-full border border-fuchsia-400/70 bg-black/25 px-6 py-3 text-sm font-bold shadow-[0_0_0_1px_rgba(59,130,246,0.35),0_0_40px_rgba(168,85,247,0.16)] backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/10 hover:shadow-[0_0_60px_rgba(168,85,247,0.35)] sm:px-8 sm:py-4 sm:text-lg"
               >
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition duration-700 group-hover:translate-x-full" />
-                <span className="relative">取扱商品を見る →</span>
+                <span className="relative">{dict.productsCta}</span>
               </a>
 
               <a
-                href="/contact"
+                href={dict.contactHref}
                 className="group relative overflow-hidden rounded-full border border-cyan-300/60 bg-white/[0.06] px-6 py-3 text-sm font-bold shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_0_40px_rgba(34,211,238,0.14)] backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/10 hover:shadow-[0_0_60px_rgba(34,211,238,0.35)] sm:px-8 sm:py-4 sm:text-lg"
               >
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition duration-700 group-hover:translate-x-full" />
-                <span className="relative">取引のご相談 →</span>
+                <span className="relative">{dict.contactCta}</span>
               </a>
             </motion.div>
 

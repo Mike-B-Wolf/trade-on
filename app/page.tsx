@@ -1,29 +1,25 @@
-import Header from "./components/sections/01_Header";
-import HeroSection from "./components/sections/02_HeroSection";
-import StatsSection from "./components/sections/03_StatsSection";
-import ProductsSection from "./components/sections/04_ProductsSection";
-import FlowSection from "./components/sections/05_FlowSection";
-import ServiceSection from "./components/sections/06_ServiceSection";
-import ContactSection from "./components/sections/07_ContactSection";
-import GroupLinksSection from "./components/sections/08_GroupLinksSection";
-import Footer from "./components/sections/09_Footer";
+import type { Metadata } from "next";
+import HomePage from "./components/HomePage";
+import { ja } from "@/locales/ja";
 
-export default function Home() {
-  return (
-    <div className="min-h-screen overflow-x-clip bg-[#040b16] text-white">
-      <Header />
-      <HeroSection />
+export const metadata: Metadata = {
+  title: ja.meta.title,
+  description: ja.meta.description,
+  openGraph: {
+    title: ja.meta.title,
+    description: ja.meta.description,
+    url: "/",
+    locale: "ja_JP",
+  },
+  twitter: {
+    title: ja.meta.title,
+    description: ja.meta.description,
+  },
+  alternates: {
+    canonical: "/",
+  },
+};
 
-      {/* Main Content */}
-      <main className="relative z-10 mt-2 px-4 pb-3 sm:mt-0 sm:px-6 lg:px-10">
-        <StatsSection />
-        <ProductsSection />
-        <FlowSection />
-        <ServiceSection />
-        <ContactSection />
-        <GroupLinksSection />
-        <Footer />
-      </main>
-    </div>
-  );
+export default function Page() {
+  return <HomePage lang="ja" dict={ja} />;
 }

@@ -1,44 +1,26 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Dictionary } from "@/locales/types";
 
-export default function ServiceSection() {
+const serviceAssets = [
+  { image: "/yama.webp", color: "cyan" },
+  { image: "/ship.webp", color: "fuchsia" },
+];
+
+type ServiceSectionProps = {
+  dict: Dictionary["service"];
+};
+
+export default function ServiceSection({ dict }: ServiceSectionProps) {
   const services = [
     {
-      tag: "SCENES",
-      title: "日本の魅力を、世界の市場へ。",
-      image: "/yama.webp",
-      color: "cyan",
-      text: (
-        <>
-          商品の品質だけでなく、
-          <br />
-          背景にある価値や想いまで丁寧に届ける。
-          <br />
-          <br />
-          TRADE-ONは、
-          <br />
-          信頼される貿易パートナーを目指しています。
-        </>
-      ),
+      ...dict.items[0],
+      ...serviceAssets[0],
     },
     {
-      tag: "GLOBAL",
-      title: "国内外をつなぐ、確かな貿易体制。",
-      image: "/ship.webp",
-      color: "fuchsia",
-      text: (
-        <>
-          仕入れ・品質確認・輸出入・商談まで、
-          <br />
-          一貫したサポート体制を構築。
-          <br />
-          <br />
-          スピードと丁寧さを大切に、
-          <br />
-          安心してお取引いただける環境を整えています。
-        </>
-      ),
+      ...dict.items[1],
+      ...serviceAssets[1],
     },
   ];
 
@@ -84,7 +66,12 @@ export default function ServiceSection() {
             <div className="mt-5 h-px w-24 bg-gradient-to-r from-fuchsia-400 via-cyan-300 to-transparent" />
 
             <p className="mt-5 max-w-lg text-sm leading-8 text-white/76 sm:text-lg">
-              {service.text}
+              {service.lines.map((line, lineIndex) => (
+                <span key={`${service.tag}-${lineIndex}`}>
+                  {lineIndex > 0 && <br />}
+                  {line}
+                </span>
+              ))}
             </p>
           </div>
         </motion.article>
