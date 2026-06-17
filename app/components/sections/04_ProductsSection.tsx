@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Handshake } from "lucide-react";
@@ -19,11 +20,37 @@ type ProductsSectionProps = {
 };
 
 export default function ProductsSection({ dict }: ProductsSectionProps) {
+  const [isMobileMotion, setIsMobileMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const updateMotionMode = () => setIsMobileMotion(mediaQuery.matches);
+
+    updateMotionMode();
+    mediaQuery.addEventListener("change", updateMotionMode);
+
+    return () => mediaQuery.removeEventListener("change", updateMotionMode);
+  }, []);
+
+  const sectionInitial = isMobileMotion
+    ? { opacity: 0.01, y: 24 }
+    : { opacity: 0, y: 40, filter: "blur(10px)" };
+  const sectionInView = isMobileMotion
+    ? { opacity: 1, y: 0 }
+    : { opacity: 1, y: 0, filter: "blur(0px)" };
+  const cardInitial = isMobileMotion
+    ? { opacity: 0.01, y: 16, scale: 1 }
+    : { opacity: 0, y: 28, scale: 0.96 };
+  const cardTransition = {
+    duration: isMobileMotion ? 0.42 : 0.65,
+    ease: "easeOut" as const,
+  };
+
   return (
     <motion.section
       id="products"
-      initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={sectionInitial}
+      whileInView={sectionInView}
       transition={{ duration: 0.9, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.2 }}
       className="mx-auto mt-7 grid max-w-7xl gap-6 lg:grid-cols-[0.75fr_1.25fr]"
@@ -72,12 +99,11 @@ export default function ProductsSection({ dict }: ProductsSectionProps) {
           return (
             <motion.article
               key={copy.title}
-              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              initial={cardInitial}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{
-                duration: 0.65,
-                delay: index * 0.08,
-                ease: "easeOut",
+                ...cardTransition,
+                delay: isMobileMotion ? index * 0.04 : index * 0.08,
               }}
               viewport={{ once: true, amount: 0.2 }}
               className="group relative min-h-[18rem] overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:border-cyan-300/35 hover:shadow-[0_0_70px_rgba(34,211,238,0.22)] sm:min-h-[20rem]"
